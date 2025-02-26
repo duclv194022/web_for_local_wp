@@ -1,15 +1,25 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState, useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { withAuth } from "@/components/withAuth";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface User {
-  id: number
-  name: string
+  id: number;
+  name: string;
 }
 
-export default function UserOtherUsersList() {
-  const [users, setUsers] = useState<User[]>([])
+function UserOtherUsersList() {
+  const [users, setUsers] = useState<User[]>([]);
+  const { authData } = useAuth();
 
   useEffect(() => {
     // Giả lập việc lấy dữ liệu từ API
@@ -19,15 +29,16 @@ export default function UserOtherUsersList() {
         { id: 1, name: "User 1" },
         { id: 2, name: "User 2" },
         { id: 3, name: "User 3" },
-      ]
-      setUsers(mockUsers)
-    }
-    fetchUsers()
-  }, [])
+      ];
+      setUsers(mockUsers);
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Other Users (User View)</h1>
+      <p className="mb-4">Welcome, {authData?.user?.username}</p>
       <Table>
         <TableHeader>
           <TableRow>
@@ -45,6 +56,7 @@ export default function UserOtherUsersList() {
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
 
+export default withAuth(UserOtherUsersList);
